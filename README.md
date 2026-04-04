@@ -60,19 +60,19 @@
 ### 方式一：npm 安装
 
 ```bash
-npm install @maxiaofang/use-xfyun-tts
+npm install @ma-xiaofang/use-xfyun-tts
 
 # 或 yarn
-yarn add @maxiaofang/use-xfyun-tts
+yarn add @ma-xiaofang/use-xfyun-tts
 
 # 或 pnpm
-pnpm add @maxiaofang/use-xfyun-tts
+pnpm add @ma-xiaofang/use-xfyun-tts
 ```
 
 安装后直接导入使用：
 
 ```js
-import useXfyunTTS from '@maxiaofang/use-xfyun-tts'
+import useXfyunTTS from '@ma-xiaofang/use-xfyun-tts'
 ```
 
 ### 方式二：手动引入
