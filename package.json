@@ -1,0 +1,46 @@
+{
+  "name": "@maxiaofang/use-xfyun-tts",
+  "version": "0.0.1",
+  "description": "讯飞语音合成（TTS）uni-app Hook，支持 Android、iOS、H5、微信小程序多平台",
+  "main": "index.js",
+  "keywords": [
+    "uniapp",
+    "tts",
+    "xfyun",
+    "讯飞",
+    "语音合成",
+    "hook",
+    "vue3"
+  ],
+  "author": "maxiaofang",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "peerDependencies": {
+    "@dcloudio/uni-app": "^3.0.0",
+    "vue": "^3.0.0"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "js-base64": "^3.7.5"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "index.js",
+    "useXfyunTTSAndroid.js",
+    "useXfyunTTSIos.js",
+    "useXfyunTTSH5.js",
+    "useXfyunTTSWx.js",
+    "README.md",
+    "CHANGELOG.md"
+  ]
+}
