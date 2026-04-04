@@ -1,10 +1,10 @@
 {
   "name": "@maxiaofang/use-xfyun-tts",
   "version": "0.0.1",
-  "description": "讯飞语音合成（TTS）uni-app Hook，支持 Android、iOS、H5、微信小程序多平台",
+  "description": "讯飞语音合成(TTS) uni-app Hook,支持 Android、iOS、H5、微信小程序多平台",
   "main": "index.js",
   "keywords": [
-    "uniapp",
+    "uni-app",
     "tts",
     "xfyun",
     "讯飞",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "files": [
     "index.js",
@@ -40,7 +40,6 @@
     "useXfyunTTSIos.js",
     "useXfyunTTSH5.js",
     "useXfyunTTSWx.js",
-    "README.md",
-    "CHANGELOG.md"
+    "README.md"
   ]
 }
