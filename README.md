@@ -1,6 +1,6 @@
 # useXfyunTTS() Uni-app HOOK
 
-讯飞语音合成（TTS）uni-app Hook，支持多平台。
+讯飞语音合成（TTS）uni-app Hook，支持 Android、iOS、H5、微信小程序多平台。
 
 ## 如何获取讯飞开发者apiKey？
 
