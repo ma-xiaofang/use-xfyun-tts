@@ -1,4 +1,4 @@
-# useXfyunTTS() HOOK
+# useXfyunTTS() Uni-app HOOK
 
 讯飞语音合成（TTS）uni-app Hook，支持多平台。
 
@@ -57,7 +57,31 @@
 
 ## 安装
 
-将 `useXfyunTTS` 文件夹复制到项目的 `hooks` 目录下。
+### 方式一：npm 安装
+
+```bash
+npm install @maxiaofang/use-xfyun-tts
+
+# 或 yarn
+yarn add @maxiaofang/use-xfyun-tts
+
+# 或 pnpm
+pnpm add @maxiaofang/use-xfyun-tts
+```
+
+安装后直接导入使用：
+
+```js
+import useXfyunTTS from '@maxiaofang/use-xfyun-tts'
+```
+
+### 方式二：手动引入
+
+将 `useXfyunTTS` 文件夹复制到项目的 `hooks` 目录下，然后导入：
+
+```js
+import useXfyunTTS from '@/hooks/useXfyunTTS/index.js'
+```
 
 ## 依赖
 

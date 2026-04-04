@@ -1,5 +1,5 @@
 if (typeof uni === 'undefined') {
-  throw new Error('[use-xfyun-tts] 此插件仅支持 uni-app 项目使用')
+  throw new Error('[@maxiaofang/use-xfyun-tts] 此插件仅支持 uni-app 项目使用！')
 }
 // #ifdef APP-PLUS
 import { useXfyunTTSAndroid } from './useXfyunTTSAndroid.js'
