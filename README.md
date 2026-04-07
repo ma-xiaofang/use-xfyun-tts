@@ -95,394 +95,358 @@ npm install crypto-js js-base64
 
 ```html
 <template>
-  <view class="container">
-    <view class="form">
-      <view class="form-item">
-        <text class="label">appId</text>
-        <input class="input" v-model="appId" placeholder="请输入讯飞 APP ID" />
-      </view>
+	<view class="container">
 
-      <view class="form-item">
-        <text class="label">apiKey</text>
-        <input
-          class="input"
-          v-model="apiKey"
-          placeholder="请输入讯飞 API Key"
-          password
-        />
-      </view>
+		<view class="form">
+			<view class="form-item">
+				<text class="label">appId</text>
+				<input class="input" v-model="appId" placeholder="请输入讯飞 APP ID" />
+			</view>
 
-      <view class="form-item">
-        <text class="label">apiSecret</text>
-        <input
-          class="input"
-          v-model="apiSecret"
-          placeholder="请输入讯飞 API Secret"
-          password
-        />
-      </view>
+			<view class="form-item">
+				<text class="label">apiKey</text>
+				<input class="input" v-model="apiKey" placeholder="请输入讯飞 API Key" password />
+			</view>
 
-      <view class="form-item">
-        <text class="label">文本内容</text>
-        <textarea
-          class="textarea"
-          v-model="text"
-          placeholder="请输入要转换的文本（少于2000字符）"
-        />
-        <text class="char-count">{{ text.length }}/2000</text>
-      </view>
+			<view class="form-item">
+				<text class="label">apiSecret</text>
+				<input class="input" v-model="apiSecret" placeholder="请输入讯飞 API Secret" password />
+			</view>
 
-      <view class="form-item">
-        <text class="label">发音人</text>
-        <picker
-          mode="selector"
-          :range="voiceList"
-          range-key="name"
-          @change="onVoiceChange"
-        >
-          <view class="picker">
-            <text>{{ currentVoice.name }}</text>
-            <text class="arrow">▼</text>
-          </view>
-        </picker>
-      </view>
+			<view class="form-item">
+				<text class="label">文本内容</text>
+				<textarea class="textarea" v-model="text" placeholder="请输入要转换的文本（少于2000字符）" />
+				<text class="char-count">{{ text.length }}/2000</text>
+			</view>
 
-      <view class="form-item">
-        <text class="label">语速 (0-100)</text>
-        <slider
-          :value="speed"
-          min="0"
-          max="100"
-          show-value
-          @change="onSpeedChange"
-        />
-      </view>
+			<view class="form-item">
+				<text class="label">发音人</text>
+				<picker mode="selector" :range="voiceList" range-key="name" @change="onVoiceChange">
+					<view class="picker">
+						<text>{{ currentVoice.name }}</text>
+						<text class="arrow">▼</text>
+					</view>
+				</picker>
+			</view>
 
-      <view class="form-item">
-        <text class="label">音量 (0-100)</text>
-        <slider
-          :value="volume"
-          min="0"
-          max="100"
-          show-value
-          @change="onVolumeChange"
-        />
-      </view>
+			<view class="form-item">
+				<text class="label">语速 (0-100)</text>
+				<slider :value="speed" min="0" max="100" show-value @change="onSpeedChange" />
+			</view>
 
-      <view class="form-item">
-        <text class="label">音调 (0-100)</text>
-        <slider
-          :value="pitch"
-          min="0"
-          max="100"
-          show-value
-          @change="onPitchChange"
-        />
-      </view>
-    </view>
+			<view class="form-item">
+				<text class="label">音量 (0-100)</text>
+				<slider :value="volume" min="0" max="100" show-value @change="onVolumeChange" />
+			</view>
 
-    <view class="actions">
-      <button
-        class="btn btn-primary"
-        :disabled="isPlaying"
-        @click="handleSynthesize"
-      >
-        {{ isPlaying ? '合成中...' : '合成播放' }}
-      </button>
-      <button class="btn" :disabled="!isPlaying" @click="handleStop">
-        停止
-      </button>
-    </view>
+			<view class="form-item">
+				<text class="label">音调 (0-100)</text>
+				<slider :value="pitch" min="0" max="100" show-value @change="onPitchChange" />
+			</view>
+		</view>
 
-    <view class="log">
-      <text class="log-title">日志</text>
-      <scroll-view class="log-content" scroll-y>
-        <text
-          v-for="(log, index) in logs"
-          :key="index"
-          :class="'log-' + log.type"
-          >{{ log.msg }}</text
-        >
-      </scroll-view>
-      <button class="btn-clear" @click="clearLogs">清空日志</button>
-    </view>
-  </view>
+		<view class="actions">
+			<button class="btn btn-primary" :disabled="isPlaying" @click="handleSynthesize">
+				{{ isPlaying ? '合成中...' : '合成播放' }}
+			</button>
+			<button class="btn" :disabled="!isPlaying" @click="handleStop">停止</button>
+		</view>
+
+		<view class="log">
+			<text class="log-title">日志</text>
+			<scroll-view class="log-content" scroll-y>
+				<text v-for="(log, index) in logs" :key="index" :class="'log-' + log.type">{{ log.msg }}</text>
+			</scroll-view>
+			<button class="btn-clear" @click="clearLogs">清空日志</button>
+		</view>
+	</view>
 </template>
 
 <script setup>
-  import { ref } from "vue";
-  import useXfyunTTS from "@/hooks/useXfyunTTS/index.js";
-  const { isPlaying, isConnected, error, synthesize, stop } = useXfyunTTS();
-  // 表单数据
-  const appId = ref("your_app_id");
-  const apiKey = ref("your_api_key");
-  const apiSecret = ref("your_api_secret");
-  const text = ref("您好，我是讯飞TTS语音合成工具。");
-  // 语音参数
-  const speed = ref(50);
-  const volume = ref(50);
-  const pitch = ref(50);
-  // 发音人列表
-  const voiceList = ref([
-    { name: "叶子 - 青年女声", value: "x4_yezi" },
-    { name: "小宇 - 青年男声", value: "xiaoyu" },
-    { name: "小蓉 - 四川话女声", value: "xiaorong" },
-    { name: "小芸 - 东北话女声", value: "xiaoyun" },
-    { name: "小强 - 青年男声", value: "xiaoqiang" },
-    { name: "小丹 - 陕西话女声", value: "xiaodan" },
-    { name: "小北 - 阳江话女声", value: "xiaobei" },
-    { name: "小东 - 河南话男声", value: "xiaodong" },
-  ]);
-  const currentVoice = ref(voiceList.value[0]);
-  // 日志
-  const logs = ref([]);
-  const addLog = (msg, type = "info") => {
-    const time = new Date().toLocaleTimeString();
-    logs.value.push({ msg: `[${time}] ${msg}`, type });
-  };
-  const clearLogs = () => {
-    logs.value = [];
-  };
+import { ref } from 'vue'
 
-  // 语音参数变化
-  const onVoiceChange = (e) => {
-    currentVoice.value = voiceList.value[e.detail.value];
-  };
+// 手动导入TTS HOOK的方式
+import useXfyunTTS from '@/hooks/useXfyunTTS/index.js'
+const { isPlaying, isConnected, error, synthesize, stop } = useXfyunTTS()
 
-  const onSpeedChange = (e) => {
-    speed.value = e.detail.value;
-  };
+// 表单数据
+const appId = ref('')
+const apiKey = ref('')
+const apiSecret = ref('')
+const text = ref('你好，这是一段测试文本。')
 
-  const onVolumeChange = (e) => {
-    volume.value = e.detail.value;
-  };
+// 语音参数
+const speed = ref(50)
+const volume = ref(50)
+const pitch = ref(50)
 
-  const onPitchChange = (e) => {
-    pitch.value = e.detail.value;
-  };
+// 发音人列表
+const voiceList = ref([
+	{ name: '叶子 - 青年女声', value: 'x4_yezi' },
+	{ name: '小宇 - 青年男声', value: 'xiaoyu' },
+	{ name: '凯瑟琳 - 英文女声', value: 'catherine' },
+	{ name: '小研 - 青年女声', value: 'xiaoyan' },
+	{ name: '小琪 - 青年女声', value: 'xiaoqi' },
+	{ name: '小峰 - 青年男声', value: 'xiaofeng' },
+	{ name: '小梅 - 老年女声', value: 'xiaomei' },
+	{ name: '小莉 - 青年女声', value: 'xiaoli' },
+	{ name: '小蓉 - 四川话女声', value: 'xiaorong' },
+	{ name: '小芸 - 东北话女声', value: 'xiaoyun' },
+	{ name: '小强 - 青年男声', value: 'xiaoqiang' },
+	{ name: '小丹 - 陕西话女声', value: 'xiaodan' },
+	{ name: '小北 - 阳江话女声', value: 'xiaobei' },
+	{ name: '小东 - 河南话男声', value: 'xiaodong' }
+])
 
-  // 处理合成
-  const handleSynthesize = () => {
-    // 参数验证
-    if (!appId.value) {
-      uni.showToast({ title: "请输入 APP ID", icon: "none" });
-      return;
-    }
+const currentVoice = ref(voiceList.value[0])
 
-    if (!apiKey.value) {
-      uni.showToast({ title: "请输入 API Key", icon: "none" });
-      return;
-    }
+// 日志
+const logs = ref([])
 
-    if (!apiSecret.value) {
-      uni.showToast({ title: "请输入 API Secret", icon: "none" });
-      return;
-    }
+const addLog = (msg, type = 'info') => {
+	const time = new Date().toLocaleTimeString()
+	logs.value.push({ msg: `[${time}] ${msg}`, type })
+}
 
-    if (!text.value.trim()) {
-      uni.showToast({ title: "请输入文本内容", icon: "none" });
-      return;
-    }
+const clearLogs = () => {
+	logs.value = []
+}
 
-    if (text.value.length > 2000) {
-      uni.showToast({ title: "文本内容请控制在2000字符以内", icon: "none" });
-      return;
-    }
+// 语音参数变化
+const onVoiceChange = (e) => {
+	currentVoice.value = voiceList.value[e.detail.value]
+}
 
-    clearLogs();
-    addLog("开始连接讯飞TTS服务...");
+const onSpeedChange = (e) => {
+	speed.value = e.detail.value
+}
 
-    synthesize({
-      appId: appId.value,
-      apiKey: apiKey.value,
-      apiSecret: apiSecret.value,
-      text: text.value,
-      voice: currentVoice.value.value,
-      speed: speed.value,
-      volume: volume.value,
-      pitch: pitch.value,
-      onStart: () => {
-        addLog("WebSocket连接成功，开始合成", "success");
-      },
-      onProgress: (data) => {
-        addLog(`接收音频数据: ${data.audioSize} bytes`);
-      },
-      onEnd: () => {
-        addLog("合成完成，播放结束", "success");
-      },
-      onError: (err) => {
-        addLog(`错误: ${err}`, "error");
-      },
-    });
-  };
+const onVolumeChange = (e) => {
+	volume.value = e.detail.value
+}
 
-  // 处理停止
-  const handleStop = () => {
-    stop();
-    addLog("已停止");
-  };
+const onPitchChange = (e) => {
+	pitch.value = e.detail.value
+}
+
+// 处理合成
+const handleSynthesize = () => {
+	// 参数验证
+	if (!appId.value) {
+		uni.showToast({ title: '请输入 APP ID', icon: 'none' })
+		return
+	}
+
+	if (!apiKey.value) {
+		uni.showToast({ title: '请输入 API Key', icon: 'none' })
+		return
+	}
+
+	if (!apiSecret.value) {
+		uni.showToast({ title: '请输入 API Secret', icon: 'none' })
+		return
+	}
+
+	if (!text.value.trim()) {
+		uni.showToast({ title: '请输入文本内容', icon: 'none' })
+		return
+	}
+
+	if (text.value.length > 2000) {
+		uni.showToast({ title: '文本内容请控制在2000字符以内', icon: 'none' })
+		return
+	}
+
+	clearLogs()
+	addLog('开始连接讯飞TTS服务...')
+
+	synthesize({
+		appId: appId.value,
+		apiKey: apiKey.value,
+		apiSecret: apiSecret.value,
+		text: text.value,
+		voice: currentVoice.value.value,
+		speed: speed.value,
+		volume: volume.value,
+		pitch: pitch.value,
+		onStart: () => {
+			addLog('WebSocket连接成功，开始合成', 'success')
+		},
+		onProgress: (data) => {
+			addLog(`接收音频数据: ${data.audioSize} bytes`)
+		},
+		onEnd: () => {
+			addLog('合成完成，播放结束', 'success')
+		},
+		onError: (err) => {
+			addLog(`错误: ${err}`, 'error')
+		}
+	})
+}
+
+// 处理停止
+const handleStop = () => {
+	stop()
+	addLog('已停止')
+}
 </script>
 
 <style>
-  .container {
-    min-height: 100vh;
-    background-color: #f5f5f5;
-    padding-bottom: 50rpx;
-  }
+.container {
+	min-height: 100vh;
+	background-color: #f5f5f5;
+	padding-bottom: 50rpx;
+}
 
-  .header {
-    padding: 40rpx 30rpx;
-    background-color: #007aff;
-  }
+.title {
+	font-size: 36rpx;
+	font-weight: bold;
+	color: #ffffff;
+}
 
-  .title {
-    font-size: 36rpx;
-    font-weight: bold;
-    color: #ffffff;
-  }
+.form {
+	padding: 30rpx;
+}
 
-  .form {
-    padding: 30rpx;
-  }
+.form-item {
+	margin-bottom: 30rpx;
+	position: relative;
+	z-index: 1;
+}
 
-  .form-item {
-    margin-bottom: 30rpx;
-    position: relative;
-    z-index: 1;
-  }
+.label {
+	display: block;
+	font-size: 28rpx;
+	color: #333333;
+	margin-bottom: 15rpx;
+}
 
-  .label {
-    display: block;
-    font-size: 28rpx;
-    color: #333333;
-    margin-bottom: 15rpx;
-  }
+.input {
+	width: 100%;
+	height: 80rpx;
+	padding: 0 20rpx;
+	font-size: 28rpx;
+	background-color: #ffffff;
+	border-radius: 10rpx;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 1;
+}
 
-  .input {
-    width: 100%;
-    height: 80rpx;
-    padding: 0 20rpx;
-    font-size: 28rpx;
-    background-color: #ffffff;
-    border-radius: 10rpx;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-  }
+.textarea {
+	width: 100%;
+	height: 200rpx;
+	padding: 20rpx;
+	font-size: 28rpx;
+	background-color: #ffffff;
+	border-radius: 10rpx;
+	box-sizing: border-box;
+	position: relative;
+	z-index: 1;
+}
 
-  .textarea {
-    width: 100%;
-    height: 200rpx;
-    padding: 20rpx;
-    font-size: 28rpx;
-    background-color: #ffffff;
-    border-radius: 10rpx;
-    box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-  }
+.char-count {
+	display: block;
+	text-align: right;
+	font-size: 22rpx;
+	color: #999999;
+	margin-top: 10rpx;
+}
 
-  .char-count {
-    display: block;
-    text-align: right;
-    font-size: 22rpx;
-    color: #999999;
-    margin-top: 10rpx;
-  }
+.picker {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 20rpx;
+	background-color: #ffffff;
+	border-radius: 10rpx;
+}
 
-  .picker {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20rpx;
-    background-color: #ffffff;
-    border-radius: 10rpx;
-  }
+.arrow {
+	font-size: 24rpx;
+	color: #999999;
+}
 
-  .arrow {
-    font-size: 24rpx;
-    color: #999999;
-  }
+.actions {
+	padding: 0 30rpx;
+	display: flex;
+	flex-direction: column;
+	gap: 20rpx;
+}
 
-  .actions {
-    padding: 0 30rpx;
-    display: flex;
-    flex-direction: column;
-    gap: 20rpx;
-  }
+.btn {
+	width: 100%;
+	height: 80rpx;
+	line-height: 80rpx;
+	font-size: 28rpx;
+	border-radius: 10rpx;
+	margin-left: 0 !important;
+	background-color: #ffffff;
+	color: #333333;
+}
 
-  .btn {
-    width: 100%;
-    height: 80rpx;
-    line-height: 80rpx;
-    font-size: 28rpx;
-    border-radius: 10rpx;
-    margin-left: 0 !important;
-    background-color: #ffffff;
-    color: #333333;
-  }
+.btn-primary {
+	background-color: #007aff;
+	color: #ffffff;
+}
 
-  .btn-primary {
-    background-color: #007aff;
-    color: #ffffff;
-  }
+.btn-primary[disabled] {
+	background-color: #99ccff;
+}
 
-  .btn-primary[disabled] {
-    background-color: #99ccff;
-  }
+.btn[disabled] {
+	background-color: #f5f5f5;
+	color: #cccccc;
+}
 
-  .btn[disabled] {
-    background-color: #f5f5f5;
-    color: #cccccc;
-  }
+.log {
+	margin: 30rpx;
+	padding: 20rpx;
+	background-color: #1a1a1a;
+	border-radius: 10rpx;
+}
 
-  .log {
-    margin: 30rpx;
-    padding: 20rpx;
-    background-color: #1a1a1a;
-    border-radius: 10rpx;
-  }
+.log-title {
+	display: block;
+	font-size: 28rpx;
+	color: #ffffff;
+	margin-bottom: 20rpx;
+}
 
-  .log-title {
-    display: block;
-    font-size: 28rpx;
-    color: #ffffff;
-    margin-bottom: 20rpx;
-  }
+.log-content {
+	height: 300rpx;
+}
 
-  .log-content {
-    height: 300rpx;
-  }
+.log-content text {
+	display: block;
+	font-size: 24rpx;
+	margin-bottom: 10rpx;
+}
 
-  .log-content text {
-    display: block;
-    font-size: 24rpx;
-    margin-bottom: 10rpx;
-  }
+.log-info {
+	color: #cccccc;
+}
 
-  .log-info {
-    color: #cccccc;
-  }
+.log-warn {
+	color: #ff9500;
+}
 
-  .log-warn {
-    color: #ff9500;
-  }
+.log-error {
+	color: #ff3b30;
+}
 
-  .log-error {
-    color: #ff3b30;
-  }
+.log-success {
+	color: #30d158;
+}
 
-  .log-success {
-    color: #30d158;
-  }
-
-  .btn-clear {
-    margin-top: 20rpx;
-    font-size: 24rpx;
-    color: #999999;
-    background-color: transparent;
-  }
+.btn-clear {
+	margin-top: 20rpx;
+	font-size: 24rpx;
+	color: #999999;
+	background-color: transparent;
+}
 </style>
+
 ```
 
 ## 权限配置
