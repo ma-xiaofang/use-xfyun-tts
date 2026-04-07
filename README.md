@@ -73,14 +73,16 @@ pnpm add @ma-xiaofang/use-xfyun-tts
 
 ```js
 import useXfyunTTS from '@ma-xiaofang/use-xfyun-tts'
+const { isPlaying, isConnected, error, synthesize, stop } = useXfyunTTS()
 ```
 
 ### 方式二：手动引入
 
-将 `useXfyunTTS` 文件夹复制到项目的 `hooks` 目录下，然后导入：
+将 `useXfyunTTS` 文件夹复制到项目的 `hooks` 目录下，然后手动导入：
 
 ```js
 import useXfyunTTS from '@/hooks/useXfyunTTS/index.js'
+const { isPlaying, isConnected, error, synthesize, stop } = useXfyunTTS()
 ```
 
 ## 依赖
